@@ -7,7 +7,7 @@ namespace SamplePlugin
 {
     public sealed class Plugin : IDalamudPlugin
     {
-        public string Name => "Fungah Safe Spot (sorta)";
+        public string Name => "Fungah";
 
         private DalamudPluginInterface PluginInterface { get; init; }
         private PluginUI PluginUi { get; init; }
