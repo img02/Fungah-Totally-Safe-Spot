@@ -1,9 +1,7 @@
 ﻿using Dalamud.Game.ClientState;
-using Dalamud.Game.Command;
 using Dalamud.Game.Gui;
 using Dalamud.IoC;
 using Dalamud.Plugin;
-using System.Collections.Generic;
 
 namespace SamplePlugin
 {
@@ -33,6 +31,6 @@ namespace SamplePlugin
         {
             this.PluginUi.Draw();
         }
-        
+
     }
 }

@@ -4,7 +4,6 @@ using Dalamud.Interface;
 using ImGuiNET;
 using System;
 using System.Numerics;
-using Microsoft.VisualBasic;
 
 namespace SamplePlugin
 {
@@ -30,7 +29,8 @@ namespace SamplePlugin
         private readonly uint _red = ImGui.GetColorU32(ImGui.ColorConvertFloat4ToU32(new Vector4(1, 0, 0, 1f)));
 
 
-        public PluginUI(ClientState clientState, GameGui gameGui) {
+        public PluginUI(ClientState clientState, GameGui gameGui)
+        {
             _clientState = clientState;
             _gameGui = gameGui;
         }
@@ -53,7 +53,7 @@ namespace SamplePlugin
             var winPos = new Vector2(circlePos.X - 15, circlePos.Y - 15);
 
             ImGuiHelpers.SetNextWindowPosRelativeMainViewport(winPos);
-            ImGui.SetNextWindowSize(new Vector2(5,5));
+            ImGui.SetNextWindowSize(new Vector2(5, 5));
             if (ImGui.Begin("Pointer", ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoResize))
             {
                 DrawCircle(circlePos);
@@ -71,8 +71,6 @@ namespace SamplePlugin
             var pos = _clientState.LocalPlayer.Position;
             return ((pos.X is > StageWest and < StageEast) && (pos.Z is < StageSouth and > StageNorth));
         }
-
-
     }
 }
 
