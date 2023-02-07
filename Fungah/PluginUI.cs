@@ -27,6 +27,7 @@ namespace SamplePlugin
         private readonly Vector3 _safeSpot = new Vector3(66.96f, -4.48f, -24.69f);
         private readonly uint _goldSaucerMapID = 144;
         private readonly uint _red = ImGui.GetColorU32(ImGui.ColorConvertFloat4ToU32(new Vector4(1, 0, 0, 1f)));
+        private readonly uint _green = ImGui.GetColorU32(ImGui.ColorConvertFloat4ToU32(new Vector4(0, 1, 0, 1f)));
 
 
         public PluginUI(ClientState clientState, GameGui gameGui)
@@ -45,6 +46,9 @@ namespace SamplePlugin
             if (PlayerOnStage()) DrawCircleWindow();
         }
 
+        /// <summary>
+        /// Draws the safe spot
+        /// </summary>
         private void DrawCircleWindow()
         {
             Vector2 circlePos;
@@ -61,10 +65,37 @@ namespace SamplePlugin
             }
         }
 
-        private void DrawCircle(Vector2 pos) => ImGui.GetWindowDrawList().AddCircleFilled(pos, 5, _red);
+        /// <summary>
+        /// Checks if player position is close to the safe spot
+        /// </summary>
+        /// <returns></returns>
+        private bool PlayerNearSafeSpot()
+        {   //shouldn't be null if this is called...
+            return _clientState.LocalPlayer != null &&
+                Vector3.DistanceSquared(_clientState.LocalPlayer.Position, _safeSpot) < 0.00025; //distance from safe spot
+        }
 
+        /// <summary>
+        /// Draws a red circle, turns green when player is really close.
+        /// </summary>
+        /// <param name="pos"></param>
+        private void DrawCircle(Vector2 pos)
+        {
+            if (PlayerNearSafeSpot()) ImGui.GetWindowDrawList().AddCircleFilled(pos, 5, _green);
+            else ImGui.GetWindowDrawList().AddCircleFilled(pos, 5, _red);
+
+        }
+
+        /// <summary>
+        /// Checks what the name says
+        /// </summary>
+        /// <returns></returns>
         private bool PlayerAtGoldSaucer() => _clientState.TerritoryType == _goldSaucerMapID;
 
+        /// <summary>
+        /// Checks if the player is on the stage, based on the stages NESW positions
+        /// </summary>
+        /// <returns></returns>
         private bool PlayerOnStage()
         {
             if (_clientState.LocalPlayer == null || !PlayerAtGoldSaucer()) return false;
