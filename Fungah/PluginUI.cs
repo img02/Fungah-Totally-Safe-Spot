@@ -26,6 +26,7 @@ namespace SamplePlugin
         private const float StageWest = 55.6f;
         private readonly Vector3 _safeSpot = new Vector3(66.96f, -4.48f, -24.69f);
         private readonly uint _goldSaucerMapID = 144;
+        private readonly float _circleRadius = 5f;
         private readonly uint _red = ImGui.GetColorU32(ImGui.ColorConvertFloat4ToU32(new Vector4(1, 0, 0, 1f)));
         private readonly uint _green = ImGui.GetColorU32(ImGui.ColorConvertFloat4ToU32(new Vector4(0, 1, 0, 1f)));
 
@@ -57,22 +58,33 @@ namespace SamplePlugin
             var winPos = new Vector2(circlePos.X - 15, circlePos.Y - 15);
 
             ImGuiHelpers.SetNextWindowPosRelativeMainViewport(winPos);
-            ImGui.SetNextWindowSize(new Vector2(5, 5));
-            if (ImGui.Begin("Pointer", ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoResize))
+            ImGui.SetNextWindowSize(new Vector2(100, 50));
+            if (ImGui.Begin("Pointer", ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoInputs))
             {
                 DrawCircle(circlePos);
+                DrawCalibrationArrow();
                 ImGui.End();
             }
         }
 
         /// <summary>
-        /// Checks if player position is close to the safe spot
+        /// Returns true if player position is on the safe spot
         /// </summary>
         /// <returns></returns>
-        private bool PlayerNearSafeSpot()
+        private bool PlayerAtSafeSpot()
         {   //shouldn't be null if this is called...
             return _clientState.LocalPlayer != null &&
                 Vector3.DistanceSquared(_clientState.LocalPlayer.Position, _safeSpot) < 0.00025; //distance from safe spot
+        }
+
+        /// <summary>
+        /// Returns true if player is near the safe spot
+        /// </summary>
+        /// <returns></returns>
+        private bool PlayerNearSafeSpot()
+        {
+            return _clientState.LocalPlayer != null &&
+                   Vector3.DistanceSquared(_clientState.LocalPlayer.Position, _safeSpot) < 0.05; //distance from safe spot
         }
 
         /// <summary>
@@ -81,9 +93,8 @@ namespace SamplePlugin
         /// <param name="pos"></param>
         private void DrawCircle(Vector2 pos)
         {
-            if (PlayerNearSafeSpot()) ImGui.GetWindowDrawList().AddCircleFilled(pos, 5, _green);
-            else ImGui.GetWindowDrawList().AddCircleFilled(pos, 5, _red);
-
+            if (PlayerAtSafeSpot()) ImGui.GetWindowDrawList().AddCircleFilled(pos, _circleRadius, _green);
+            else ImGui.GetWindowDrawList().AddCircleFilled(pos, _circleRadius, _red);
         }
 
         /// <summary>
@@ -102,6 +113,20 @@ namespace SamplePlugin
             var pos = _clientState.LocalPlayer.Position;
             // south and north are negative values.
             return ((pos.X is > StageWest and < StageEast) && (pos.Z is < StageSouth and > StageNorth));
+        }
+
+        /// <summary>
+        /// Draws movement helper text when near, but not on, the safe spot
+        /// </summary>
+        private void DrawCalibrationArrow()
+        {
+            if (PlayerAtSafeSpot() || !PlayerNearSafeSpot()) return;
+            var pos = _clientState.LocalPlayer!.Position;
+            // gud enuf
+            if (pos.X - _safeSpot.X > 0.015) ImGui.Text("\nmove left");
+            else if (_safeSpot.X - pos.X > 0.015) ImGui.Text("\nmove right");
+            else if (pos.Z < _safeSpot.Z) ImGui.Text("\nmove down");
+            else if(pos.Z > _safeSpot.Z) ImGui.Text("\nmove up");
         }
     }
 }
