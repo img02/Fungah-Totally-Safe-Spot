@@ -3,7 +3,9 @@ using Dalamud.Game.Gui;
 using Dalamud.Interface;
 using ImGuiNET;
 using System;
+using System.Linq;
 using System.Numerics;
+using Dalamud.Game.ClientState.Objects;
 
 namespace SamplePlugin
 {
@@ -13,6 +15,7 @@ namespace SamplePlugin
     {
         private readonly ClientState _clientState;
         private readonly GameGui _gameGui;
+        private readonly ObjectTable _objectTable;
 
         // south of stage : <70.78049, -4.472919, -21.072674>
         // east of stage  : <85.45761, -4.4729047, -36.12376>
@@ -20,6 +23,8 @@ namespace SamplePlugin
         // west of stage  : <55.68961, -4.4729276, -35.709606>
         // 'Safe' spot    : <66.96, -4.48, -24.69> 
 
+        // Supercilious Spellweaver data id - https://github.com/xivapi/ffxiv-datamining/blob/master/csv/ENpcResident.csv
+        private const uint FungahNpcId = 1010476;
         private const float StageNorth = -50.76f;
         private const float StageSouth = -21f;
         private const float StageEast = 85.45f;
@@ -31,10 +36,11 @@ namespace SamplePlugin
         private readonly uint _green = ImGui.GetColorU32(ImGui.ColorConvertFloat4ToU32(new Vector4(0, 1, 0, 1f)));
 
 
-        public PluginUI(ClientState clientState, GameGui gameGui)
+        public PluginUI(ClientState clientState, GameGui gameGui, ObjectTable objectTable)
         {
             _clientState = clientState;
             _gameGui = gameGui;
+            _objectTable = objectTable;;
         }
 
 
@@ -104,15 +110,28 @@ namespace SamplePlugin
         private bool PlayerAtGoldSaucer() => _clientState.TerritoryType == _goldSaucerMapID;
 
         /// <summary>
-        /// Checks if the player is on the stage, based on the stages NESW positions
+        /// Checks if the player is on the stage during the fungah GATE, based on the stages NESW positions
         /// </summary>
         /// <returns></returns>
         private bool PlayerOnStage()
         {
-            if (_clientState.LocalPlayer == null || !PlayerAtGoldSaucer()) return false;
+            if (_clientState.LocalPlayer == null || !PlayerAtGoldSaucer() || !IsFungahEvent()) return false;
             var pos = _clientState.LocalPlayer.Position;
             // south and north are negative values.
             return ((pos.X is > StageWest and < StageEast) && (pos.Z is < StageSouth and > StageNorth));
+        }
+
+        /// <summary>
+        /// Checks if fungah GATE is running by looking for the event NPC dataId of "Supercilious Spellweaver"
+        /// </summary>
+        /// <returns></returns>
+        private bool IsFungahEvent()
+        {
+#if DEBUG
+            return true;
+#else
+            return _objectTable.Any(o => o.DataId == FungahNpcId);
+#endif
         }
 
         /// <summary>

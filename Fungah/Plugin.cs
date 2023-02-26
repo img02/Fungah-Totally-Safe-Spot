@@ -1,4 +1,5 @@
 ﻿using Dalamud.Game.ClientState;
+using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.Gui;
 using Dalamud.IoC;
 using Dalamud.Plugin;
@@ -15,9 +16,10 @@ namespace SamplePlugin
         public Plugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
             ClientState clientState,
-            GameGui gameGui)
+            GameGui gameGui,
+            ObjectTable objectTable)
         {
-            this.PluginUi = new PluginUI(clientState, gameGui);
+            this.PluginUi = new PluginUI(clientState, gameGui, objectTable);
             this.PluginInterface = pluginInterface;
             this.PluginInterface.UiBuilder.Draw += DrawUI;
         }
