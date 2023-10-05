@@ -6,6 +6,8 @@ using System;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects;
+using Dalamud.Plugin.Services;
+using Dalamud.Interface.Utility;
 
 namespace SamplePlugin
 {
@@ -13,9 +15,9 @@ namespace SamplePlugin
     // to do any cleanup
     public unsafe class PluginUI : IDisposable
     {
-        private readonly ClientState _clientState;
-        private readonly GameGui _gameGui;
-        private readonly ObjectTable _objectTable;
+        private readonly IClientState _clientState;
+        private readonly IGameGui _gameGui;
+        private readonly IObjectTable _objectTable;
 
         // south of stage : <70.78049, -4.472919, -21.072674>
         // east of stage  : <85.45761, -4.4729047, -36.12376>
@@ -36,7 +38,7 @@ namespace SamplePlugin
         private readonly uint _green = ImGui.GetColorU32(ImGui.ColorConvertFloat4ToU32(new Vector4(0, 1, 0, 1f)));
 
 
-        public PluginUI(ClientState clientState, GameGui gameGui, ObjectTable objectTable)
+        public PluginUI(IClientState clientState, IGameGui gameGui, IObjectTable objectTable)
         {
             _clientState = clientState;
             _gameGui = gameGui;
