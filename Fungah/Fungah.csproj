@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Authors>https://github.com/imaginary-png</Authors>
+    <Authors>https://github.com/img02</Authors>
     <Company></Company>
-    <Version>1.0.0.1</Version>
+    <Version>1.0.0.2</Version>
     <Copyright>poop</Copyright>
-    <PackageProjectUrl>https://github.com/imaginary-png/Fungah-Totally-Safe-Spot</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/img02/Fungah-Totally-Safe-Spot</PackageProjectUrl>
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Platforms>x64</Platforms>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
@@ -28,6 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="FFXIVClientStructs">
+      <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     <Reference Include="Dalamud">
       <HintPath>$(DalamudLibPath)Dalamud.dll</HintPath>
       <Private>false</Private>
