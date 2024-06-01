@@ -117,8 +117,7 @@ namespace SamplePlugin
         /// <returns></returns>
         private bool PlayerOnStage()
         {
-            //if (_clientState.LocalPlayer == null || !PlayerAtGoldSaucer() || !IsFungahEvent()) return false;
-            if (_clientState.LocalPlayer == null || !PlayerAtGoldSaucer()) return false;           
+            if (_clientState.LocalPlayer == null || !PlayerAtGoldSaucer() || !IsFungahEvent()) return false;            
             var pos = _clientState.LocalPlayer.Position;
             // south and north are negative values.
             return ((pos.X is > StageWest and < StageEast) && (pos.Z is < StageSouth and > StageNorth));
