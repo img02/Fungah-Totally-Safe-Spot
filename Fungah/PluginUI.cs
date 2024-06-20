@@ -66,8 +66,8 @@ namespace SamplePlugin
             var winPos = new Vector2(circlePos.X - 15, circlePos.Y - 15);
 
             ImGuiHelpers.SetNextWindowPosRelativeMainViewport(winPos);
-            ImGui.SetNextWindowSize(new Vector2(100, 50));
-            if (ImGui.Begin("Pointer", ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoInputs))
+            ImGui.SetNextWindowSize(new Vector2(90, 50) * ImGuiHelpers.GlobalScale);
+            if (ImGui.Begin("Pointer",  ImGuiWindowFlags.NoBackground | ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoInputs))
             {
                 DrawCircle(circlePos);
                 DrawCalibrationArrow();
@@ -144,10 +144,20 @@ namespace SamplePlugin
             if (PlayerAtSafeSpot() || !PlayerNearSafeSpot()) return;
             var pos = _clientState.LocalPlayer!.Position;
             // gud enuf
-            if (pos.X - _safeSpot.X > 0.015) ImGui.Text("\nmove left");
-            else if (_safeSpot.X - pos.X > 0.015) ImGui.Text("\nmove right");
-            else if (pos.Z < _safeSpot.Z) ImGui.Text("\nmove down");
-            else if(pos.Z > _safeSpot.Z) ImGui.Text("\nmove up");
+
+            ImGui.SetCursorPosY(24f);            
+            ImGui.PushStyleColor(ImGuiCol.ChildBg, new Vector4(0,0,0,0.8f));           
+            ImGui.BeginChild("dfsaf", new Vector2(80f, 20f) * ImGuiHelpers.GlobalScale);
+            ImGui.SetCursorPosX(4f * ImGuiHelpers.GlobalScale);
+
+            if (pos.X - _safeSpot.X > 0.015) ImGui.Text("move left");
+            else if (_safeSpot.X - pos.X > 0.015) ImGui.Text("move right");
+            else if (pos.Z < _safeSpot.Z) ImGui.Text("move down");
+            else if(pos.Z > _safeSpot.Z) ImGui.Text("move up");
+            
+            ImGui.EndChild();
+            ImGui.PopStyleColor();
+            
         }
     }
 }
