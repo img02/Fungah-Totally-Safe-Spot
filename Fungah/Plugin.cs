@@ -11,11 +11,11 @@ namespace SamplePlugin
     {
         public string Name => "Fungah";
 
-        private DalamudPluginInterface PluginInterface { get; init; }
+        private IDalamudPluginInterface PluginInterface { get; init; }
         private PluginUI PluginUi { get; init; }
 
         public Plugin(
-            [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
+            IDalamudPluginInterface pluginInterface,
             IClientState clientState,
             IGameGui gameGui,
             IObjectTable objectTable)
