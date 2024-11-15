@@ -4,6 +4,7 @@ using Dalamud.Game.Gui;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
+using Fungah;
 
 namespace SamplePlugin
 {
@@ -18,11 +19,13 @@ namespace SamplePlugin
             IDalamudPluginInterface pluginInterface,
             IClientState clientState,
             IGameGui gameGui,
-            IObjectTable objectTable)
+            IObjectTable objectTable,
+            IPluginLog pluginLog)
         {
             this.PluginUi = new PluginUI(clientState, gameGui, objectTable);
             this.PluginInterface = pluginInterface;
             this.PluginInterface.UiBuilder.Draw += DrawUI;
+            PluginLog.Logger = pluginLog;
         }
 
         public void Dispose()
