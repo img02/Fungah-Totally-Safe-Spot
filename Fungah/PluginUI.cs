@@ -63,9 +63,12 @@ namespace SamplePlugin
         {
             Vector2 circlePos;
             _gameGui.WorldToScreen(_safeSpot, out circlePos);
-            PluginLog.Debug($"Drawing Circle At: {circlePos}");
             var winPos = new Vector2(circlePos.X - 15, circlePos.Y - 15);
+
+#if DEBUG
+            PluginLog.Debug($"Drawing Circle At: {circlePos}");
             PluginLog.Debug($"Drawing Window At: {winPos}");
+#endif
 
             ImGuiHelpers.SetNextWindowPosRelativeMainViewport(winPos);
             ImGui.SetNextWindowSize(new Vector2(90, 50) * ImGuiHelpers.GlobalScale);
@@ -103,7 +106,9 @@ namespace SamplePlugin
         /// <param name="pos"></param>
         private void DrawCircle(Vector2 pos)
         {
+#if DEBUG
             PluginLog.Debug($"int: Drawing Circle At: {pos}");
+#endif
             if (PlayerAtSafeSpot()) ImGui.GetWindowDrawList().AddCircleFilled(pos, _circleRadius, _green);
             else ImGui.GetWindowDrawList().AddCircleFilled(pos, _circleRadius, _red);
         }
@@ -133,7 +138,7 @@ namespace SamplePlugin
         private bool IsFungahEvent()
         {
 #if DEBUG
-            return _objectTable.Any(o => o.DataId == FungahNpcId);
+            PluginLog.Debug($"npc: {_objectTable.Any(o => o.DataId == FungahNpcId)}");
             return true;
 #else
             return _objectTable.Any(o => o.DataId == FungahNpcId);
