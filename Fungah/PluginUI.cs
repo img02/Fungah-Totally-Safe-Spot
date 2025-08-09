@@ -1,7 +1,7 @@
 ﻿using Dalamud.Game.ClientState;
 using Dalamud.Game.Gui;
 using Dalamud.Interface;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using System;
 using System.Linq;
 using System.Numerics;
